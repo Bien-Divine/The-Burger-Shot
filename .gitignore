@@ -1,0 +1,19 @@
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# Dependencies (if you add Composer/npm later)
+/vendor/
+/node_modules/
+
+# Local-only files
+.env
+*.local.php
+uploads/
+
+# Keep config/db.php committed for now (XAMPP defaults)
+# If you ever add a real password, uncomment the next line:
+# config/db.php
