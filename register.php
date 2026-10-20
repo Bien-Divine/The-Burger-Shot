@@ -5,7 +5,12 @@ require_once __DIR__ . '/includes/functions.php';
 if (is_logged_in()) { header('Location: home.php'); exit; }
 
 $errors = [];
-$old = ['full_name' => '', 'email' => '', 'phone' => ''];
+// Check if we passed their details from the guest checkout success page
+$old = [
+    'full_name' => $_GET['name'] ?? '',
+    'email'     => $_GET['email'] ?? '',
+    'phone'     => ''
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf'] ?? null)) {
