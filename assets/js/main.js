@@ -132,4 +132,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Boot ---------- */
   sync(api('get'));
+
+    /* ---------- WhatsApp Integration ---------- */
+  const waBtn = document.getElementById('whatsappBtn');
+  if (waBtn) {
+    waBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // If cart is empty, show a toast and don't open WhatsApp
+      if (!cart.items || cart.items.length === 0) {
+        toast('Your bag is empty. Add some items first!', true);
+        return;
+      }
+
+      // Build the message
+      let message = "Hello The Burger Shot! 🍔\nI'd like to place an order:\n\n";
+      cart.items.forEach(item => {
+        message += `- ${item.qty}x ${item.name} ($${item.line_total.toFixed(2)})\n`;
+      });
+      message += `\n*Total: $${cart.total.toFixed(2)}*`;
+      
+      // Get the phone number from the data attribute
+      const phone = waBtn.getAttribute('data-phone');
+      
+      // Create the WhatsApp URL
+      const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      
+      // Open in a new tab
+      window.open(waUrl, '_blank');
+    });
+  }
 });

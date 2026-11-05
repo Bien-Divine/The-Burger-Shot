@@ -232,3 +232,39 @@ a{ text-decoration:none; }
   .menu-card .small{ font-size:.75rem; }
   .price{ font-size:.95rem; }
 }
+
+/* ============ Floating WhatsApp Button ============ */
+.whatsapp-float {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  left: auto !important;
+  width: 60px !important;
+  height: 60px !important;
+  background-color: #25D366 !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 2rem !important;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4) !important;
+  z-index: 99999 !important;
+  text-decoration: none !important;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1) rotate(5deg) !important;
+  background-color: #128C7E !important;
+}
+
+@media (max-width: 991.98px) {
+  .whatsapp-float {
+    bottom: 100px !important; 
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 1.6rem !important;
+    right: 16px !important;
+  }
+}
+

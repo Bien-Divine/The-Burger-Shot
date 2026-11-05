@@ -4,7 +4,10 @@ declare(strict_types=1);
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'burgershot');
 define('DB_USER', 'root');
-define('DB_PASS', '');          // change if you set a MySQL password
+define('DB_PASS', '');
+// WhatsApp Business Number (country code + number, NO plus sign or spaces)
+define('WHATSAPP_NUMBER', '2349012500324');
+// change if you set a MySQL password
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

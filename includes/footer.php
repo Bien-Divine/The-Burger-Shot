@@ -38,7 +38,7 @@
         <h6 class="footer-head">Visit us</h6>
         <ul class="list-unstyled small text-secondary mb-0">
           <li><i class="bi bi-geo-alt text-accent"></i> 14 Grill Street, Lagos</li>
-          <li><i class="bi bi-telephone text-accent"></i> +234 800 000 0000</li>
+          <li><i class="bi bi-telephone text-accent"></i> +234 901 250 0324</li>
           <li><i class="bi bi-envelope text-accent"></i> hello@burgershot.com</li>
           <li><i class="bi bi-clock text-accent"></i> Mon–Sun · 10:00 – 23:00</li>
         </ul>
@@ -71,6 +71,11 @@
     </div>
   </div>
 </div>
+
+<!-- ===== Floating WhatsApp Button ===== -->
+<a href="#" id="whatsappBtn" class="whatsapp-float" data-phone="<?= defined('WHATSAPP_NUMBER') ? WHATSAPP_NUMBER : '2349012500324' ?>" target="_blank" aria-label="Order via WhatsApp">
+  <i class="bi bi-whatsapp"></i>
+</a>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/main.js"></script>
