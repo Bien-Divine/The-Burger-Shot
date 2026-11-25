@@ -106,10 +106,22 @@ function render_menu_card(array $item, bool $showAdd = true): string {
     $img   = e($item['image_url']);
     $cat   = e(ucwords(str_replace('-', ' ', $item['category'])));
     $price = '$' . number_format((float)$item['price'], 2);
+    
+    // Encode the item data so JavaScript can read it when clicked
+    $itemData = htmlspecialchars(json_encode([
+        'id' => $id,
+        'name' => $item['name'],
+        'price' => (float)$item['price'],
+        'image' => $item['image_url'],
+        'description' => $item['description'] ?? '',
+        'allergens' => $item['allergens'] ?? 'None listed',
+        'category' => $cat
+    ]), ENT_QUOTES, 'UTF-8');
 
     ob_start(); ?>
     <div class="col-6 col-lg-4 col-xl-3">
-      <article class="menu-card">
+      <!-- Added data-item attribute and cursor pointer -->
+      <article class="menu-card" data-item="<?= $itemData ?>" style="cursor: pointer;">
         <div class="thumb">
           <img src="<?= $img ?>" alt="<?= $name ?>" loading="lazy">
           <span class="badge-cat"><?= $cat ?></span>
@@ -121,6 +133,7 @@ function render_menu_card(array $item, bool $showAdd = true): string {
             <span class="price"><?= $price ?></span>
           </div>
           <?php if ($showAdd): ?>
+            <!-- Removed the onclick event so the JS cart listener can catch it -->
             <button class="btn btn-accent btn-sm w-100 mt-2" data-add-to-cart="<?= $id ?>">
               <i class="bi bi-bag-plus"></i> Add to bag
             </button>

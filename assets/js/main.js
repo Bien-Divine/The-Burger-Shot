@@ -22,15 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return res.json();
   }
 
-  /* ---------- Render ---------- */
   function render() {
-    // badges
     document.querySelectorAll('[data-cart-count]').forEach(el => {
       el.textContent = cart.count;
       el.style.display = cart.count > 0 ? 'grid' : 'none';
     });
 
-    // sticky mobile bar
     const bar = document.getElementById('orderBar');
     if (bar) {
       bar.hidden = cart.count === 0;
@@ -39,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bt) bt.textContent = money(cart.total);
     }
 
-    // drawer
     const wrap    = document.getElementById('cartItems');
     const totalEl = document.getElementById('cartTotal');
     if (!wrap) return;
@@ -87,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ---------- Toast ---------- */
   let toastTimer;
   function toast(msg, isError = false) {
     let el = document.getElementById('bsToast');
@@ -104,8 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
     toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
   }
 
-  /* ---------- Delegated events ---------- */
+  /* ---------- ONE Master Click Listener ---------- */
   document.addEventListener('click', async (e) => {
+    
+    // 1. Handle closing the modal (X button or backdrop)
+    if (e.target.closest('.modal .btn-close') || e.target.closest('.modal [data-bs-dismiss="modal"]')) {
+      const modalEl = e.target.closest('.modal');
+      if (modalEl) {
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        if (modalInstance) modalInstance.hide();
+      }
+      return;
+    }
+
+    // 2. Handle Add to Cart (Works for both Card buttons AND the Modal button)
     const addBtn = e.target.closest('[data-add-to-cart]');
     if (addBtn) {
       e.preventDefault();
@@ -114,51 +121,75 @@ document.addEventListener('DOMContentLoaded', () => {
       addBtn.disabled = false;
       toast('Added to your bag 🍔');
       if (drawer) drawer.show();
+
+      // If the button was inside the modal, close the modal
+      const modalEl = addBtn.closest('.modal');
+      if (modalEl) {
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        if (modalInstance) setTimeout(() => modalInstance.hide(), 300);
+      }
       return;
     }
 
+    // 3. Handle Cart Quantity Set
     const setBtn = e.target.closest('[data-cart-set]');
     if (setBtn) {
       await sync(api('set', { id: setBtn.dataset.cartSet, qty: setBtn.dataset.qty }));
       return;
     }
 
+    // 4. Handle Cart Item Remove
     const remBtn = e.target.closest('[data-cart-remove]');
     if (remBtn) {
       await sync(api('remove', { id: remBtn.dataset.cartRemove }));
       return;
+    }
+
+    // 5. Handle Menu Card Click (Open Modal)
+    const card = e.target.closest('.menu-card');
+    if (!card) return;
+    if (e.target.closest('[data-add-to-cart]')) return;
+
+    try {
+      const itemData = JSON.parse(card.getAttribute('data-item'));
+      const itemModalEl = document.getElementById('itemModal');
+      
+      if (itemModalEl) {
+        document.getElementById('modalImage').src = itemData.image;
+        document.getElementById('modalName').textContent = itemData.name;
+        document.getElementById('modalDesc').textContent = itemData.description;
+        document.getElementById('modalCategory').textContent = itemData.category;
+        document.getElementById('modalAllergens').textContent = itemData.allergens;
+        document.getElementById('modalPrice').textContent = '$' + itemData.price.toFixed(2);
+        document.getElementById('modalAddBtn').setAttribute('data-add-to-cart', itemData.id);
+        
+        const itemModal = bootstrap.Modal.getOrCreateInstance(itemModalEl);
+        itemModal.show();
+      }
+    } catch (err) {
+      console.error("Could not parse item data", err);
     }
   });
 
   /* ---------- Boot ---------- */
   sync(api('get'));
 
-    /* ---------- WhatsApp Integration ---------- */
+  /* ---------- WhatsApp Integration ---------- */
   const waBtn = document.getElementById('whatsappBtn');
   if (waBtn) {
     waBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      
-      // If cart is empty, show a toast and don't open WhatsApp
       if (!cart.items || cart.items.length === 0) {
         toast('Your bag is empty. Add some items first!', true);
         return;
       }
-
-      // Build the message
       let message = "Hello The Burger Shot! 🍔\nI'd like to place an order:\n\n";
       cart.items.forEach(item => {
         message += `- ${item.qty}x ${item.name} ($${item.line_total.toFixed(2)})\n`;
       });
       message += `\n*Total: $${cart.total.toFixed(2)}*`;
-      
-      // Get the phone number from the data attribute
       const phone = waBtn.getAttribute('data-phone');
-      
-      // Create the WhatsApp URL
       const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-      
-      // Open in a new tab
       window.open(waUrl, '_blank');
     });
   }

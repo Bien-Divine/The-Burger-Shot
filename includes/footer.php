@@ -77,6 +77,41 @@
   <i class="bi bi-whatsapp"></i>
 </a>
 
+<!-- ===== Item Detail Modal ===== -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bs-modal">
+      <div class="modal-header border-0 pb-0">
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 pt-0">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <img id="modalImage" src="" alt="" class="img-fluid rounded-4" style="width: 100%; aspect-ratio: 1; object-fit: cover;">
+          </div>
+          <div class="col-md-6 d-flex flex-column">
+            <span id="modalCategory" class="badge-cat position-static align-self-start mb-2"></span>
+            <h2 id="modalName" class="h3 mb-2"></h2>
+            <p id="modalDesc" class="text-secondary flex-grow-1"></p>
+            
+            <div class="mb-3 p-3 rounded-3" style="background:var(--bg-3); border:1px solid var(--line);">
+              <div class="small text-secondary text-uppercase mb-1" style="letter-spacing:1px;">Allergens</div>
+              <div id="modalAllergens" class="small fw-bold"></div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mt-auto">
+              <span id="modalPrice" class="fs-3 fw-bold text-accent"></span>
+              <button id="modalAddBtn" class="btn btn-accent btn-lg px-4" data-add-to-cart="">
+                <i class="bi bi-bag-plus"></i> Add to bag
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
