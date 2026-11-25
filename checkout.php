@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Redirect based on login status
             if (is_logged_in()) {
-                flash('success', "Order #{$orderId} placed! We're firing up the grill.");
+                // Removed the global $orderId from the message
+                flash('success', "Order placed! We're firing up the grill.");
                 header('Location: orders.php');
             } else {
                 // Store the order ID in session so the success page can read it
